@@ -1,10 +1,65 @@
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/********************************************************************************************************/
+document.getElementById("uploader").innerHTML = '<div id=\"uplo\">\n<form id=\"upload_form\" enctype=\"multipart/form-data\" method=\"post\" action=\"handler.php\" hidden>\n<input type=\"file\" name=\"files[]\" id=\"fileUp\" multiple hidden>\n<input type=\"text\" name=\"source\" id=\"source\" hidden>\n<input type=\"text\" name=\"path\" id=\"path\" value=\"uploads/\" hidden>\n</form>\n<div class=\"grid grid-4 top w3-theme-l2\">\n<button class=\"btn w3-theme\" id=\"openinFile\"><i class=\"fas fa-file-upload\"></i> BROWSE</button>\n<button onclick=\"refresh()\" class=\"btn w3-theme-d1\"><i class=\"fas fa-sync-alt\"></i> REFRESH</button>\n<button onclick=\"move()\" class=\"btn w3-theme-d3\"><i class=\"fas fa-expand-arrows-alt\"></i> Move</button>\n<div class=\"dropdown\">\n<button onclick=\"myFunction()\" class=\"btn w3-theme-d5\"><i class=\"fas fa-plus-circle\"></i> CREATE</button>\n<div id=\"myDropdown\" class=\"dropdown-content\">\n<input type=\"text\" placeholder=\"Search...\" id=\"myInput\" onkeyup=\"filterFunction()\">\n<a href=\"javascript: cr(\'folder\')\">Folder</a>\n<a href=\"javascript: cr(\'file\')\">File</a>\n</div>\n</div>\n</div>\n<div class=\"grid grid-1 main w3-theme-l2\" id=\"shower\">\n</div>\n<div class=\"info\">\nsupported formats: <i title=\"txt, jpeg, jpg, png, mp4, mts, zip, rar, tar, gzip, mp3, mpeg, wav, ogg, gif, bmp, css, html, php, c, cpp, h, hpp, webm, mpeg, 3gpp, mov, avi, mpeggs, wmv, flvjs, json\" class=\"fas fa-info-circle\"></i>\n</div>\n</div>\n<ul class=\'custom-menu\'>\n<li data-action=\"details\">Details</li>\n<li data-action=\"delete\">Delete</li>\n<li data-action=\"rename\">Rename</li>\n</ul>\n<div id=\"myModal\" class=\"modal\">\n<div class=\"modal-content\">\n<div class=\"modal-header\">\n<h3 id=\"modal_header\"></h3>\n<span class=\"close\">×</span>\n</div>\n<div class=\"modal-body\" id=\"modal_body\">\n<div id=\"editor\" style=\"position: absolute;top: 0;right: 0;bottom: 0;left: 0;\"></div>\n<img src=\"\" alt=\"Picture\" id=\"editorPicture\">\n<audio src=\"\" id=\"editorPlayer\" controls>\nYour browser does not support the <code>audio</code> element.\n</audio>\n<video src=\"\" id=\"editorVideoPlayer\" controls>\nYour browser does not support the <code>video</code> element.\n</video>\n</div>\n<div class=\"modal-footer\" id=\"modal_footer\">\n<h3>\n<a href=\"\" id=\"downloadBtn\" download>Download</a>\n<button onclick=\"changeSettings(\'edit\')\" class=\"sbtn\" id=\"editbtn\">Edit</button>\n<button onclick=\"changeSettings(\'save\')\" class=\"sbtn\" id=\"savebtn\">Save</button>\n</h3>\n</div>\n</div>\n</div>';
+var uploadFolder = "uploads";
 var editor = ace.edit("editor");
-editor.setTheme("ace/theme/monokai");
-//editor.session.setMode("ace/mode/javascript");
-editor.setReadOnly(true);
-editor.session.setUseWrapMode(true);
+window.onload = function (event) {
+    var clientWidth = document.getElementById('uplo').clientWidth;
+    if (clientWidth < 830) {
+        let x = document.getElementsByClassName("btn");
+        for (let i = 0; i < x.length; i++) {
+            x[i].className += " btn830px";
+        }
+    }
+    if (clientWidth < 500) {
+        let x = document.getElementsByClassName("btn");
+        for (let i = 0; i < x.length; i++) {
+            x[i].className += " btn500px";
+        }
+    }
 
+    if (clientWidth < 350) {
+        let x = document.getElementsByClassName("file");
+        for (let i = 0; i < x.length; i++) {
+            x[i].className += " file350px";
+        }
+        let y = document.getElementsByClassName("allow");
+        for (let i = 0; i < y.length; i++) {
+            y[i].className += " allow350px";
+        }
+    }
+
+    if (clientWidth < 300) {
+        console.log(300)
+        let x = document.getElementsByClassName("grid-4");
+        for (let i = 0; i < x.length; i++) {
+            x[i].className = x[i].className.replace("grid-4", "grid-1");
+            //x[i].className += " grid-4300px";
+        }
+        let y = document.getElementsByClassName("top");
+        for (let i = 0; i < y.length; i++) {
+            y[i].className = y[i].className.replace("top", "top300px");
+            //y[i].className += " top300px";
+        }
+        let z = document.getElementsByClassName("main");
+        for (let i = 0; i < z.length; i++) {
+            z[i].className = z[i].className.replace("main", "main300px");
+            //z[i].className += " main300px";
+        }
+        let k = document.getElementsByClassName("info");
+        for (let i = 0; i < k.length; i++) {
+            k[i].className = k[i].className.replace("info", "info300px");
+            //k[i].className += " info300px";
+        }
+    }
+
+
+    /*****************************************************************************************************/
+    
+    editor.setTheme("ace/theme/monokai");
+    //editor.session.setMode("ace/mode/javascript");
+    editor.setReadOnly(true);
+    editor.session.setUseWrapMode(true);
+};
 var cvar;
 var currentFile = "";
 document.getElementById("fileUp").onchange = function (e) {
@@ -60,11 +115,13 @@ function includes(ex) {
 
 function refresh() {
     $("#shower").empty();
+    var path = document.getElementById("source").value;
     $.ajax({
         url: "handler.php",
         dataType: "json",
         data: {
-            utility: "getfolder"
+            utility: "getfolder",
+            uploadFolder: uploadFolder
         },
         success: function (result) {
             cross = result;
@@ -294,3 +351,4 @@ var ID = function () {
 function sleep(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
 }
+/******************************************************************************************************/
