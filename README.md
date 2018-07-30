@@ -5,3 +5,12 @@ This framework is currently in work so you will get some alerts like "{something
 It is not a point of money. These features will come sone.
 
 Currently the framework is unflexible to install because I did not work on it.
+
+Information:
+
+/*Minimum size*/
+height:400px;
+width: 200px;
+
+/* Maximum size
+infinity */
