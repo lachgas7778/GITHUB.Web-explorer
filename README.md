@@ -7,10 +7,10 @@ It is not a point of money. These features will come sone.
 Currently the framework is unflexible to install because I did not work on it.
 
 Information:
-
-/*Minimum size*/
-height:400px;
-width: 200px;
-
-/* Maximum size
-infinity */
+  Responsive:
+    minimum size:
+      height:400px;
+      width: 200px;
+      
+    maximum size
+      unlimited 
