@@ -6,6 +6,8 @@ It is not a point of money. These features will come sone.
 
 Currently the framework is unflexible to install because I did not work on it.
 
+Currently working on minify all and make it flexible.
+
 Information:
 
   Responsive:
