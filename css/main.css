@@ -32,8 +32,26 @@
      user-select: none;
  }
 
- .custom-menu li:hover {
+ .custom-menu li:not(.menu):hover {
      background-color: #DEF;
+ }
+
+ .custom-menu > .menu {
+     border-bottom: 2px dashed gray;
+     text-align: center;
+ }
+
+ li.menu-item::before {
+     content: "+ ";
+ }
+
+ .custom-menu > .menu-item {
+     float: right;
+     border-bottom: 2px dashed gray;
+ }
+
+ .folder {
+     background: #474777 !important;
  }
 
  .grid {
@@ -54,7 +72,11 @@
 
  .main {
      overflow-y: scroll;
-     height: 80%;
+     height: 75%;
+ }
+
+ .submenu {
+     height: 5%;
  }
 
  .grid-1 {
@@ -284,9 +306,7 @@
      to {
          opacity: 1
      }
- }
-
- ///////////////////////////////////////////////////////////////////////////////////////////
+ } ///////////////////////////////////////////////////////////////////////////////////////////
  @media only screen and (max-width: 830px) {
      .btn {
          font-size: 10pt;
@@ -314,7 +334,12 @@
      #allow {
          font-size: 5pt;
      }
+ }
 
+ @media only screen and (max-width: 350px) {
+     .fileGrid {
+         font-size: 5pt;
+     }
  }
 
  .file350px {
@@ -359,9 +384,7 @@
      font-size: 10pt;
      text-align: center;
      background: linear-gradient(to bottom right, #446003, #b9d96a);
- }
-
- /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+ } /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
  #editor {
      position: absolute;
      top: 0;
@@ -482,9 +505,7 @@
      color: gray;
  }
 
- .fa-info-circle:hover,
- .info:hover,
- info300px:hover {
+ .fa-info-circle:hover {
      color: rgb(10, 10, 10);
      cursor: pointer;
  }
@@ -656,4 +677,46 @@
 
  .w3-hover-border-theme:hover {
      border-color: #8AC007 !important
- } ///////////////////////////////////////////////////////////////////////////////////////////
+ }
+
+ .fa-align-justify,
+ .fa-grip-horizontal,
+ .fa-info-circle {
+     color: white;
+     padding: 10px;
+ }
+
+ .fa-info-circle:hover,
+ .fa-grip-horizontal:hover,
+ .fa-align-justify:hover {
+     color: rgb(10, 10, 10);
+     cursor: pointer;
+ }
+
+ .fileGrid {
+     width: calc(100% - 20px);
+     height: calc(100% - 20px);
+     margin-left: 10px;
+     border: 1px solid;
+     border-radius: 8px;
+     box-shadow: 2px 2px grey;
+     background: yellowgreen;
+ }
+
+ .fileGrid:hover {
+     transform: translate(1px, 1px);
+     box-shadow: 1px 1px grey;
+ }
+
+ .fileGrid:nth-child(-n+4) {
+     margin-top: 10px;
+ }
+
+ .godirup {
+     border: none;
+     font-size: 10pt !important;
+ }
+
+ .line {
+     text-decoration: line-through;
+ }

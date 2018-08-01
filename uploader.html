@@ -5,20 +5,18 @@
     <!-- Required meta tags -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.1.0/css/all.css" integrity="sha384-lKuwvrZot6UHsBSfcMvOkWwlCMgc0TaWr+30HWe3a4ltaBwTZhyTEggF5tJv8tbt" crossorigin="anonymous">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB" crossorigin="anonymous">
     <link type="text/css" rel="stylesheet" href="css/main.css">
     <title>Uploader</title>
 </head>
 <style>
-    #editor {
-        
-    }
+
+
 </style>
 
 <body>
-    <!--
+
     <div id="uplo">
         <form id="upload_form" enctype="multipart/form-data" method="post" action="handler.php" hidden>
             <input type="file" name="files[]" id="fileUp" multiple hidden>
@@ -26,6 +24,7 @@
             <input type="text" name="path" id="path" value="uploads/" hidden>
             <input type="text" name="utility" id="utility" value="upload" hidden>
         </form>
+
         <div class="grid grid-4 top w3-theme-l2">
             <button class="btn w3-theme" id="openinFile"><i class="fas fa-file-upload"></i> BROWSE</button>
             <button onclick="refresh()" class="btn w3-theme-d1"><i class="fas fa-sync-alt"></i> REFRESH</button>
@@ -39,25 +38,33 @@
                 </div>
             </div>
         </div>
+        <div class="submenu">
+            <button onclick="gofileup()" draggable="true" class="btn godirup w3-theme-action" id="godirup" name="godirup" title="go up a directory"><span class="acti" id="godirupacti">go up a directory</span> <i class="fas fa-level-up-alt "></i></button>
+        </div>
         <div class="grid grid-1 main w3-theme-l2" id="shower">
         </div>
         <div class="info">
-            supported formats: <i title="txt, jpeg, jpg, png, mp4, mts, zip, rar, tar, gzip, mp3, mpeg, wav, ogg, gif, bmp, css, html, php, c, cpp, h, hpp, webm, mpeg, 3gpp, mov, avi, mpeggs, wmv, flv, js, json" class="fas fa-info-circle"></i>
+            <i title="txt, jpeg, jpg, png, mp4, mts, zip, rar, tar, gzip, mp3, mpeg, wav, ogg, gif, bmp, css, html, php, c, cpp, h, hpp, webm, mpeg, 3gpp, mov, avi, mpeggs, wmv, flv, js, json" class="fas fa-info-circle"></i>
+            <i class="fas fa-align-justify" title="Line-Layout"></i>
+            <i class="fas fa-grip-horizontal" title="Grid-Layout"></i>
         </div>
     </div>
     <ul class='custom-menu'>
         <li data-action="details">Details</li>
         <li data-action="delete">Delete</li>
         <li data-action="rename">Rename</li>
+        <li class="menu">Create</li>
+        <li data-action="create" class="menu-item">Folder</li>
+        <li data-action="create" class="menu-item">File</li>
     </ul>
     <div id="myModal" class="modal">
         <div class="modal-content">
             <div class="modal-header">
                 <h3 id="modal_header"></h3>
-                <span class="close">&times;</span>
+                <span class="close" id="closebtn">&times;</span>
             </div>
             <div class="modal-body" id="modal_body">
-                <div id="editor"></div>
+                <div id="editor" style="position: absolute;top: 0;right: 0;bottom: 0;left: 0;"></div>
                 <img src="" alt="Picture" id="editorPicture">
                 <audio src="" id="editorPlayer" controls>
                     Your browser does not support the <code>audio</code> element.
@@ -70,12 +77,13 @@
 
                 <h3>
                     <a href="" id="downloadBtn" download>Download</a>
-                    <button onclick="changeSettings('edit')" class="sbtn" id="editbtn">Edit</button>
-                    <button onclick="changeSettings('save')" class="sbtn" id="savebtn">Save</button>
+                    <button onclick="changeSettings( 'edit')" class="sbtn" id="editbtn">Edit</button>
+                    <button onclick="changeSettings( 'save')" class="sbtn" id="savebtn">Save</button>
                 </h3>
             </div>
         </div>
-    </div>-->
+    </div>
+    <!---->
     <div id="uploader"></div>
 
     <!-- Javascript -->
@@ -85,7 +93,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js" integrity="sha384-smHYKdLADwkXOn1EmN1qk/HfnUcbVRZyYmZ4qpPea6sjB/pTJ0euyQp0Mk8ck+5T" crossorigin="anonymous"></script>
     <!---->
-    
+
     <script>
         let tempo = window.location.href.split("/");
         document.getElementById("source").value = tempo[tempo.length - 1];

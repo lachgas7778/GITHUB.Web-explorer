@@ -45,7 +45,8 @@ if($m == "read"){
         $dir = new DirectoryIterator(dirname(__FILE__)."/".$folder);
         $path = dirname(__FILE__)."/".$folder;
         foreach ($dir as $fileinfo) {
-            if($fileinfo->getFilename() === "." or $fileinfo->getFilename() === ".." or $fileinfo->getFilename()[0] === "."){
+            echo $fileinfo->getFilename();
+            if($fileinfo->getFilename() === "." or $fileinfo->getFilename() === ".." or $fileinfo->getFilename()[0] === "." or $fileinfo->getFilename() == "htaccess"){
             }else{
                 array_push($result, $fileinfo->getFilename());
             }
@@ -54,15 +55,17 @@ if($m == "read"){
         $result1["files"] = $result;
         echo json_encode($result1);
    }else{	
-        //$iterator = new DirectoryIterator(dirname(__FILE__));
-        //$iterator->getPath();
         $result = Array();
         $dir = new DirectoryIterator(dirname(__FILE__)."/".$folder."/");
         foreach ($dir as $fileinfo) {
-            if($fileinfo->getFilename() === "." or $fileinfo->getFilename() === ".."  or $fileinfo->getFilename()[0] === "."){
+            if($fileinfo->getFilename() === "." or $fileinfo->getFilename() === ".."  or $fileinfo->getFilename()[0] === "." or $fileinfo->getFilename() == "htaccess"){
 
             }else if($fileinfo->getExtension() == ""){
-                array_push($result, $fileinfo->getFilename()."(no extension found)");
+                if(is_dir($folder."/".$fileinfo->getFilename()) === false){
+                    array_push($result, $fileinfo->getFilename()."(no extension found)");
+                }else{
+                    array_push($result, $fileinfo->getFilename()."?fff");
+                }
             }else {
                 array_push($result, $fileinfo->getFilename());
             }

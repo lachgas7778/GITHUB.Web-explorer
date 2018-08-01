@@ -1,7 +1,10 @@
-/********************************************************************************************************/
-document.getElementById("uploader").innerHTML = '<div id=\"uplo\">\n<form id=\"upload_form\" enctype=\"multipart/form-data\" method=\"post\" action=\"handler.php\" hidden>\n<input type=\"file\" name=\"files[]\" id=\"fileUp\" multiple hidden>\n<input type=\"text\" name=\"source\" id=\"source\" hidden>\n<input type=\"text\" name=\"path\" id=\"path\" value=\"uploads/\" hidden>\n</form>\n<div class=\"grid grid-4 top w3-theme-l2\">\n<button class=\"btn w3-theme\" id=\"openinFile\"><i class=\"fas fa-file-upload\"></i> BROWSE</button>\n<button onclick=\"refresh()\" class=\"btn w3-theme-d1\"><i class=\"fas fa-sync-alt\"></i> REFRESH</button>\n<button onclick=\"move()\" class=\"btn w3-theme-d3\"><i class=\"fas fa-expand-arrows-alt\"></i> Move</button>\n<div class=\"dropdown\">\n<button onclick=\"myFunction()\" class=\"btn w3-theme-d5\"><i class=\"fas fa-plus-circle\"></i> CREATE</button>\n<div id=\"myDropdown\" class=\"dropdown-content\">\n<input type=\"text\" placeholder=\"Search...\" id=\"myInput\" onkeyup=\"filterFunction()\">\n<a href=\"javascript: cr(\'folder\')\">Folder</a>\n<a href=\"javascript: cr(\'file\')\">File</a>\n</div>\n</div>\n</div>\n<div class=\"grid grid-1 main w3-theme-l2\" id=\"shower\">\n</div>\n<div class=\"info\">\nsupported formats: <i title=\"txt, jpeg, jpg, png, mp4, mts, zip, rar, tar, gzip, mp3, mpeg, wav, ogg, gif, bmp, css, html, php, c, cpp, h, hpp, webm, mpeg, 3gpp, mov, avi, mpeggs, wmv, flvjs, json\" class=\"fas fa-info-circle\"></i>\n</div>\n</div>\n<ul class=\'custom-menu\'>\n<li data-action=\"details\">Details</li>\n<li data-action=\"delete\">Delete</li>\n<li data-action=\"rename\">Rename</li>\n</ul>\n<div id=\"myModal\" class=\"modal\">\n<div class=\"modal-content\">\n<div class=\"modal-header\">\n<h3 id=\"modal_header\"></h3>\n<span class=\"close\">×</span>\n</div>\n<div class=\"modal-body\" id=\"modal_body\">\n<div id=\"editor\" style=\"position: absolute;top: 0;right: 0;bottom: 0;left: 0;\"></div>\n<img src=\"\" alt=\"Picture\" id=\"editorPicture\">\n<audio src=\"\" id=\"editorPlayer\" controls>\nYour browser does not support the <code>audio</code> element.\n</audio>\n<video src=\"\" id=\"editorVideoPlayer\" controls>\nYour browser does not support the <code>video</code> element.\n</video>\n</div>\n<div class=\"modal-footer\" id=\"modal_footer\">\n<h3>\n<a href=\"\" id=\"downloadBtn\" download>Download</a>\n<button onclick=\"changeSettings(\'edit\')\" class=\"sbtn\" id=\"editbtn\">Edit</button>\n<button onclick=\"changeSettings(\'save\')\" class=\"sbtn\" id=\"savebtn\">Save</button>\n</h3>\n</div>\n</div>\n</div>';
+//document.getElementById("uploader").innerHTML = '<div id=\"uplo\">\n<form id=\"upload_form\" enctype=\"multipart/form-data\" method=\"post\" action=\"handler.php\" hidden>\n<input type=\"file\" name=\"files[]\" id=\"fileUp\" multiple hidden>\n<input type=\"text\" name=\"source\" id=\"source\" hidden>\n<input type=\"text\" name=\"path\" id=\"path\" value=\"uploads/\" hidden>\n</form>\n<div class=\"grid grid-4 top w3-theme-l2\">\n<button class=\"btn w3-theme\" id=\"openinFile\"><i class=\"fas fa-file-upload\"></i> BROWSE</button>\n<button onclick=\"refresh()\" class=\"btn w3-theme-d1\"><i class=\"fas fa-sync-alt\"></i> REFRESH</button>\n<button onclick=\"move()\" class=\"btn w3-theme-d3\"><i class=\"fas fa-expand-arrows-alt\"></i> Move</button>\n<div class=\"dropdown\">\n<button onclick=\"myFunction()\" class=\"btn w3-theme-d5\"><i class=\"fas fa-plus-circle\"></i> CREATE</button>\n<div id=\"myDropdown\" class=\"dropdown-content\">\n<input type=\"text\" placeholder=\"Search...\" id=\"myInput\" onkeyup=\"filterFunction()\">\n<a href=\"javascript: cr(\'folder\')\">Folder</a>\n<a href=\"javascript: cr(\'file\')\">File</a>\n</div>\n</div>\n</div>\n<div class=\"grid grid-1 main w3-theme-l2\" id=\"shower\">\n</div>\n<div class=\"info\">\nsupported formats: <i title=\"txt, jpeg, jpg, png, mp4, mts, zip, rar, tar, gzip, mp3, mpeg, wav, ogg, gif, bmp, css, html, php, c, cpp, h, hpp, webm, mpeg, 3gpp, mov, avi, mpeggs, wmv, flvjs, json\" class=\"fas fa-info-circle\"></i>\n</div>\n</div>\n<ul class=\'custom-menu\'>\n<li data-action=\"details\">Details</li>\n<li data-action=\"delete\">Delete</li>\n<li data-action=\"rename\">Rename</li>\n</ul>\n<div id=\"myModal\" class=\"modal\">\n<div class=\"modal-content\">\n<div class=\"modal-header\">\n<h3 id=\"modal_header\"></h3>\n<span class=\"close\">×</span>\n</div>\n<div class=\"modal-body\" id=\"modal_body\">\n<div id=\"editor\" style=\"position: absolute;top: 0;right: 0;bottom: 0;left: 0;\"></div>\n<img src=\"\" alt=\"Picture\" id=\"editorPicture\">\n<audio src=\"\" id=\"editorPlayer\" controls>\nYour browser does not support the <code>audio</code> element.\n</audio>\n<video src=\"\" id=\"editorVideoPlayer\" controls>\nYour browser does not support the <code>video</code> element.\n</video>\n</div>\n<div class=\"modal-footer\" id=\"modal_footer\">\n<h3>\n<a href=\"\" id=\"downloadBtn\" download>Download</a>\n<button onclick=\"changeSettings(\'edit\')\" class=\"sbtn\" id=\"editbtn\">Edit</button>\n<button onclick=\"changeSettings(\'save\')\" class=\"sbtn\" id=\"savebtn\">Save</button>\n</h3>\n</div>\n</div>\n</div>';
 var uploadFolder = "uploads";
+var currentFolders = [uploadFolder];
+var currentFolder = currentFolders[currentFolders.length - 1];
 var editor = ace.edit("editor");
+var cross = [];
+gofileup();
 window.onload = function (event) {
     var clientWidth = document.getElementById('uplo').clientWidth;
     if (clientWidth < 830) {
@@ -29,7 +32,6 @@ window.onload = function (event) {
     }
 
     if (clientWidth < 300) {
-        console.log(300)
         let x = document.getElementsByClassName("grid-4");
         for (let i = 0; i < x.length; i++) {
             x[i].className = x[i].className.replace("grid-4", "grid-1");
@@ -53,8 +55,7 @@ window.onload = function (event) {
     }
 
 
-    /*****************************************************************************************************/
-    
+
     editor.setTheme("ace/theme/monokai");
     //editor.session.setMode("ace/mode/javascript");
     editor.setReadOnly(true);
@@ -66,6 +67,21 @@ document.getElementById("fileUp").onchange = function (e) {
     cvar = e;
     $("#upload_form").submit();
 };
+var layout = "lineLayout";
+$(".fa-align-justify").on("click", function () {
+    $("#shower").removeClass("grid-4");
+    $("#shower").addClass("grid-1");
+    $(".fileGrid").addClass("file");
+    $(".fileGrid").removeClass("fileGrid");
+    layout = "lineLayout";
+})
+$(".fa-grip-horizontal").on("click", function () {
+    $("#shower").removeClass("grid-1");
+    $("#shower").addClass("grid-4");
+    $(".file").addClass("fileGrid");
+    $(".file").removeClass("file");
+    layout = "gridLayout";
+})
 
 function changeSettings(mode) {
     if (mode == "edit") {
@@ -94,13 +110,13 @@ function changeSettings(mode) {
     }
 }
 
-var cross = [];
+
 var allowed = ["txt", "jpeg", "jpg", "png", "mp4", "mts", "zip", "rar", "tar", "gzip", "mp3", "mpeg", "wav", "ogg", "gif", "bmp", "css", "html", "php", "c", "cpp", "h", "hpp", "webm", "mpeg", "3gpp", "mov", "avi", "mpeggs", "wmv", "flv", "js", "md"];
 $('#openinFile').click(function () {
     $('#fileUp').trigger('click');
 })
 
-$(".fas.fa-info-circle, .info").on("click", function () {
+$(".fas.fa-info-circle").on("click", function () {
     alert("Supported formats: \ntxt, jpeg, jpg, png, mp4, mts, zip(coming soon), rar, tar, gzip, mp3, mpeg, wav, ogg, gif, bmp, css, html, php, c, cpp, h, hpp, webm, mpeg, 3gpp, mov, avi, mpeggs, wmv, flv, js");
 })
 
@@ -121,16 +137,51 @@ function refresh() {
         dataType: "json",
         data: {
             utility: "getfolder",
-            uploadFolder: uploadFolder
+            uploadFolder: currentFolder
         },
         success: function (result) {
             cross = result;
+            result.sort();
+            result = sortArr(result);
+            var c;
+            if (layout == "lineLayout") {
+                c = "file";
+            } else {
+                c = "fileGrid";
+            }
             for (let i = 0; i < result.length; i++) {
                 var ext = result[i].substring(result[i].lastIndexOf(".") + 1, result[i].length);
                 if (includes(ext.toLowerCase()) == true) {
-                    $("#shower").append('<button onclick="file(this)" draggable="true" class="file context-menu" id="' + result[i] + '" name="' + result[i] + '"><i class="fas fa-file"></i> <span class="acti">' + result[i] + '</span></button>');
+                    var temp = "";
+                    if (result[i].length > 20) {
+                        if (result[i].lastIndexOf(" ") > 19) {
+                            temp = result[i].substring(0, result[i].lastIndexOf(" "));
+                            while (temp.length > 20) {
+                                if (temp.lastIndexOf(" ") != -1) {
+                                    temp = temp.substring(0, temp.lastIndexOf(" "));
+                                } else {
+                                    temp = temp.substring(0, 15);
+                                }
+                            }
+                        } else {
+                            if (result[i].lastIndexOf(" ") != -1) {
+                                temp = result[i].substring(0, result[i].lastIndexOf(" "));
+                            } else {
+                                temp = result[i].substring(0, 15);
+                            }
+                        }
+                        temp += "<font>... </font>";
+                    } else {
+                        temp = result[i];
+                    }
+                    $("#shower").append('<button onclick="file(this)" draggable="true" class="' + c + ' context-menu" id="' + result[i] + '" name="' + result[i] + '" title="' + result[i] + '"><i class="fas fa-file"></i> <span class="acti">' + temp + '</span></button>');
                 } else {
-                    $("#shower").append('<button class="file context-menu" id="' + result[i] + '" name="' + result[i] + 'error"><i class="fas fa-file"></i> <span class="acti">' + result[i] + '(not supported)</span></button>');
+                    if (result[i].indexOf("?fff") != -1) {
+                        result[i] = result[i].replace("?fff", "");
+                        $("#shower").append('<button onclick="file(this)" class="' + c + ' folder context-menu" id="' + result[i] + ' ?fff" name="' + result[i] + ' ?fff" title="' + result[i] + '"><i class="fas fa-folder-open"></i> <span class="acti">' + result[i] + '</span></button>');
+                    } else {
+                        $("#shower").append('<button class="' + c + ' context-menu" id="' + result[i] + '" name="' + result[i] + 'error" title="' + result[i] + '"><i class="fas fa-file"></i> <span class="acti">' + result[i] + '(not supported)</span></button>');
+                    }
                 }
             }
         },
@@ -142,6 +193,38 @@ function refresh() {
     })
 }
 refresh();
+
+function sortArr(arr) {
+    let tempArr = Array();
+    for (let i = 0; i < arr.length; i++) {
+        if (arr[i].indexOf("?fff") !== -1) {
+            tempArr.push(arr[i]);
+            arr.splice(i, 1);
+        }
+    }
+    tempArr.sort();
+    return tempArr.concat(arr);
+}
+
+function gofileup() {
+    if (currentFolders.length == 1) {
+
+    } else {
+        let te = false;
+        currentFolder = currentFolder.split("/");
+        currentFolders.splice(currentFolders.length - 1);
+        currentFolder = "";
+        for (let i = 0; i < currentFolders.length; i++) {
+            if (te === false) {
+                currentFolder += currentFolders[i];
+                te = true;
+            } else {
+                currentFolder += "/" + currentFolders[i];
+            }
+        }
+        refresh();
+    }
+}
 
 function dele(file) {
     if (file.indexOf("(no extension found)") != -1) {
@@ -180,13 +263,15 @@ function cr(type) {
     } else {
         alert("not installed")
     }
-    document.getElementById("myDropdown").classList.toggle("show");
-
+    if(document.getElementById("myDropdown").classList.contains("show")){
+        document.getElementById("myDropdown").classList.remove("show");
+    }else{
+    }
 }
 
 function create(type, name) {
     $.ajax({
-        url: "hanlder.php",
+        url: "handler.php",
         data: {
             mode: type,
             name: name,
@@ -234,6 +319,10 @@ $(".custom-menu li").click(function () {
         case "delete":
             dele(currentFile)
             break;
+        case "create":
+            console.log($(this).html())
+            cr($(this).html().toLowerCase());
+            break;
     }
     $(".custom-menu").hide(100);
 })
@@ -245,11 +334,17 @@ function rename() {
 var data;
 
 function file(a) {
-    readF(a);
+    if (a.id.indexOf("?fff") != -1) {
+        let t = a.id.replace(" ?fff", "");
+        currentFolder += "/" + t;
+        currentFolders.push(t);
+        refresh();
+    } else {
+        readF(a);
+    }
 }
 
 function readF(id) {
-
     $.ajax({
         url: "handler.php",
         dataType: "json",
@@ -326,6 +421,11 @@ function readF(id) {
     })
 }
 
+$("#closebtn").on("click", function () {
+    document.getElementById("editorVideoPlayer").pause();
+    document.getElementById("editorPlayer").pause();
+})
+
 function myFunction() {
     document.getElementById("myDropdown").classList.toggle("show");
 }
@@ -351,4 +451,3 @@ var ID = function () {
 function sleep(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
 }
-/******************************************************************************************************/
